@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "Mona Sans";
+  src: url("../fonts/Mona-Sans.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/GeistMono-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  src: url("../fonts/Geist-Regular.ttf") format("truetype");
+}
+
+/* ::selection {
+  background-color: rgb(223, 255, 250);
+  color: rgb(0, 0, 0);
+} */
+
+body {
+  font-family: "Mona Sans", sans-serif;
+}

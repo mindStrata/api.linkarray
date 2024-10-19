@@ -1,0 +1,10 @@
+/node_modules
+.env
+error.log
+/apis
+/utils/logger.js
+DummyData.json
+/services
+/helper/gen
+/docs
+/services
