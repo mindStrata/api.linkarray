@@ -3,13 +3,13 @@
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/username/repository-name.git
+git clone https://github.com/mindStrata/server.linkarray.git
 ```
 
 ## 2. Navigate into the Project Directory
 
 ```bash
-cd repository-name
+cd server.linkarray
 ```
 
 ## 3. Install Dependencies
