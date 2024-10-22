@@ -83,8 +83,27 @@ export const getLinks = async (req, res, next) => {
  * @returns {Promise<void>} Does not return a value; sends the user profile as a response or calls next with an error.
  */
 export const updateLinkById = async (req, res, next) => {
+  // Check validation of the fields
+  const errors = validationResult(req);
+  // Check validation error, if yes, then demonstrate it to the user
+  if (!errors.isEmpty()) {
+    const errorMessages = errors
+      .array()
+      .map((err) => err.msg)
+      .join(", ");
+    return next(createHttpError(404, errorMessages));
+  }
+  // Proceed next if there is no any validation error
   const { linkId } = req.params;
   try {
+    const link = await Link.findById({ _id: linkId });
+    // console.log(link);
+    if (
+      link.url === req.body.url ||
+      link.isVisible === req.body.isVisible ||
+      link.title === req.body.title
+    )
+      return next(createHttpError(400, "Values are exactly same"));
     const updateLink = await Link.findByIdAndUpdate(
       linkId,
       {
@@ -116,9 +135,28 @@ export const updateLinkById = async (req, res, next) => {
  * @returns {Promise<void>} Does not return a value; sends the user profile as a response or calls next with an error.
  */
 export const deleteLinkById = async (req, res, next) => {
+  // Check validation of the fields
+  const errors = validationResult(req);
+  // Check validation error, if yes, then demonstrate it to the user
+  if (!errors.isEmpty()) {
+    const errorMessages = errors
+      .array()
+      .map((err) => err.msg)
+      .join(", ");
+    return next(createHttpError(404, errorMessages));
+  }
+  // Proceed next if there is no any validation error
   const { linkId } = req.params;
+
   try {
     const deleteLink = await Link.findByIdAndDelete(linkId);
+    // Delete the link id from the user's link array
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { links: linkId } }, // Use $pull to remove the linkId from the links array
+      { new: true } // Option to return the updated document
+    );
+
     // If the link id is invalid or not found, throw error
     if (!deleteLink) return next(createHttpError(404, "Link not found"));
     res.status(200).json({

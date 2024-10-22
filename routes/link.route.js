@@ -12,7 +12,10 @@ import {
   updateLinkById,
 } from "../controller/link.controller.js";
 import isAuthenticated from "../middleware/isAutheticated.js";
-import { linkValidation } from "../validators/link.route.validation/index.js";
+import {
+  linkIdValidation,
+  linkValidation,
+} from "../validators/link.route.validation/index.js";
 
 const router = express.Router();
 
@@ -41,13 +44,14 @@ router.get("/getlinks", isAuthenticated, getLinks);
  * @method PUT - Updates the link with the specified ID.
  * @method DELETE - Deletes the link with the specified ID.
  * @access Protected - Requires authentication
+ * @middleware linkIdValidation To validate the parameter
  * @middleware isAuthenticated - Ensures the user is logged in
  * @controller updateLinkById - Handles updating the link
  * @controller deleteLinkById - Handles deleting the link
  */
 router
   .route("/:linkId")
-  .put(isAuthenticated, updateLinkById) // Update the link by ID
-  .delete(isAuthenticated, deleteLinkById); // Delete the link by ID
+  .put(linkIdValidation, isAuthenticated, updateLinkById) // Update the link by ID
+  .delete(linkIdValidation, isAuthenticated, deleteLinkById); // Delete the link by ID
 
 export default router;

@@ -3,7 +3,7 @@
  * @file This file handles the form data validations send from the client
  */
 
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 /**
  * @middleware linkValidation
@@ -26,4 +26,17 @@ export const linkValidation = [
     .isURL({ protocols: ["https"], require_protocol: true })
     .withMessage("Please provide a valid HTTPS URL")
     .trim(),
+];
+
+/**
+ * @middleware linkIdValidation
+ * @type {Array}
+ * @description To verify the link id for further actions (e.g., update, delete), if invalid throws error.
+ */
+export const linkIdValidation = [
+  param("linkId")
+    .notEmpty()
+    .withMessage("Linkid is required")
+    .isMongoId()
+    .withMessage("Invalid link id"),
 ];

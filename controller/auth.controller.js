@@ -39,8 +39,14 @@ export const signupUser = async (req, res, next) => {
     const token = jwt.sign({ _id: newUser._id }, config.jwtSecret, {
       expiresIn: "1h",
     });
-    res.cookie("token", token, {
+    /* res.cookie("token", token, {
       httpOnly: config.SERVER_ENVIRONMENT === "development" ? false : true,
+      maxAge: 60 * 60 * 1000, // One hour validity
+    }); */
+    res.cookie("token", token, {
+      httpOnly: true, // Keep httpOnly for security purposes
+      sameSite: "None", // Allow cross-origin cookies
+      secure: config.SERVER_ENVIRONMENT === "production" ? true : false, // Secure only in production (HTTPS)
       maxAge: 60 * 60 * 1000, // One hour validity
     });
     res.status(201).json({

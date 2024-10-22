@@ -5,6 +5,7 @@
 import createHttpError from "http-errors";
 import { Link } from "../models/link.model.js";
 import { User } from "../models/user.model.js";
+import { validationResult } from "express-validator";
 
 /**
  * @function getProfile
@@ -84,6 +85,18 @@ export const deleteAccount = async (req, res, next) => {
  * @returns {Promise<void>} Does not return a value; sends the user profile as a response or calls next with an error.
  */
 export const getUserByUsername = async (req, res, next) => {
+  // Check validation of the fields
+  const errors = validationResult(req);
+  // Check validation error, if yes, then demonstrate it to the user
+  if (!errors.isEmpty()) {
+    const errorMessages = errors
+      .array()
+      .map((err) => err.msg)
+      .join(", ");
+    return next(createHttpError(404, errorMessages));
+  }
+  // Proceed next if there is no any validation error
+  const { email, password } = req.body;
   const { username } = req.params;
   try {
     const user = await User.findOne({ username }).populate("links");

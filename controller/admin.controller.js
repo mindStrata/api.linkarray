@@ -186,9 +186,11 @@ export const deleteUserById = async (req, res, next) => {
     // Delete the corresponding links of the user
     const deleteLinks = await Link.deleteMany({ user: userid });
     res.status(200).json({
+      success: true,
       message: "User and associated data deleted successfully",
       deletedUser,
       deletedLinksCount: deleteLinks.deletedCount,
+      error: null,
     });
   } catch (error) {
     next(error);
